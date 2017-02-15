@@ -65,10 +65,10 @@ class Hero(Character):
 
     def receive_damage(self, points):
         #Each evade point deceases chance of being hit by 5%
-        chance_to_behit = 100 - (self.evade * 5)
-        print "%s percent chance to be hit" % chance_to_behit
+        percent_chance = 100 - (self.evade * 5)
+        print "%s percent chance to be hit" % percent_chance
 
-        if chance_to_behit < random.randint(1,100):
+        if random.randrange(0,100) < percent_chance:
             points = points - self.armor
             self.health -= points
             print "%s received %d damage." % (self.name, points)

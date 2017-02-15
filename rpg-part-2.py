@@ -38,6 +38,7 @@ class Hero(Character):
         self.coins = 20
         self.armor = 0
         self.evade = 0
+        self.inventory = []
 
     def restore(self):
         self.health = 10
@@ -47,7 +48,9 @@ class Hero(Character):
     def buy(self, item):
         if self.coins >= item.cost:
             self.coins -= item.cost
-            item.apply(hero)
+            #Store itself in the inventory instead of apply to hero
+            #item.store_item(hero.inventory)
+            self.inventory.append(item)
         else:
             print "Not enough coins"
 
@@ -66,7 +69,9 @@ class Hero(Character):
     def receive_damage(self, points):
         #Each evade point deceases chance of being hit by 5%
         percent_chance = 100 - (self.evade * 5)
-        print "%s percent chance to be hit" % percent_chance
+        #print "%s percent chance to be hit" % percent_chance
+        if percent_chance > 90:
+            percent_chance = 90
 
         if random.randrange(0,100) < percent_chance:
             points = points - self.armor
@@ -79,6 +84,9 @@ class Hero(Character):
     def collect_bounty(self, enemy):
         print "%s collected %d coins" % (self.name, enemy.bounty)
         self.coins = self.coins + enemy.bounty
+
+    # def store_item(self, item):
+    #     inventory.append(item)
 
 class Medic(Character):
     def __init__(self):
@@ -201,7 +209,8 @@ class Battle(object):
             print "What do you want to do?"
             print "1. fight %s" % enemy.name
             print "2. do nothing"
-            print "3. flee"
+            print "3. check inventory"
+            print "4. flee"
             print "> ",
             input = int(raw_input())
             if input == 1:
@@ -209,6 +218,9 @@ class Battle(object):
             elif input == 2:
                 pass
             elif input == 3:
+                for item in hero.inventory:
+                    print item
+            elif input == 4:
                 print "Goodbye."
                 exit(0)
             else:
@@ -230,12 +242,18 @@ class Tonic(object):
         character.health += 2
         print "%s's health increased to %d." % (character.name, character.health)
 
+    def __repr__(self):
+        return "Tonic"
+
 class Sword(object):
     cost = 10
     name = 'sword'
     def apply(self, hero):
         hero.power += 2
         print "%s's power increased to %d." % (hero.name, hero.power)
+
+    def __repr__(self):
+        return "Sword"
 
 class Axe(object):
     cost = 15
@@ -244,12 +262,18 @@ class Axe(object):
         hero.power += 4
         print "%s's power increased to %d." % (hero.name, hero.power)
 
+    def __repr__(self):
+        return "Axe"
+
 class SuperTonic(object):
     cost = 10
     name = 'super tonic'
     def apply(self, character):
         character.health = 10
         print "%s's health is restored." % character.name
+
+    def __repr__(self):
+        return "Super Tonic"
 
 class Poison(object):
     cost = 10
@@ -258,6 +282,9 @@ class Poison(object):
         character.health -= 10
         print "%s's health decreased to %d." % (character.name, character.health)
 
+    def __repr__(self):
+        return "Poison"
+
 class Armor(object):
     cost = 10
     name = 'armor'
@@ -265,12 +292,18 @@ class Armor(object):
         character.armor += 2
         print "%s's armor is increased by %d" % (hero.name, hero.armor)
 
+    def __repr__(self):
+        return "Armor"
+
 class Evade(object):
     cost = 10
     name = 'evade'
     def apply(self, character):
         character.evade += 2
         print "%s's evade is increased by %d" % (hero.name, hero.evade)
+
+    def __repr__(self):
+        return "Evade"
 
 class Store(object):
     # If you define a variable in the scope of a class:
@@ -299,6 +332,11 @@ class Store(object):
 hero = Hero()
 #enemies = [Goblin(), Wizard()]
 enemies = [Goblin(), Goblin_Chief(), Goblin()]
+
+#Inventory Checking
+#free_tonic = Tonic()
+#hero.inventory.append(free_tonic)
+
 battle_engine = Battle()
 shopping_engine = Store()
 

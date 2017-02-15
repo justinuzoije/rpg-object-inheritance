@@ -33,9 +33,9 @@ class Character(object):
 class Hero(Character):
     def __init__(self):
         self.name = 'hero'
-        self.health = 10
+        self.health = 100 #Previously 10
         self.power = 5
-        self.coins = 20
+        self.coins = 200 #Previously 20
         self.armor = 0
         self.evade = 0
         self.inventory = []
@@ -165,18 +165,25 @@ class Ghost(Character):
         if self.health <= 0:
             print "%s is dead." % self.name
 
+class Goblin_King(Character):
+    def __init__(self):
+        self.name = 'goblin king'
+        self.health = 40
+        self.power = 8
+        self.bounty = 20
+
 class Goblin_Chief(Character):
     def __init__(self):
         self.name = 'goblin chief'
-        self.health = 10
+        self.health = 20
         self.power = 4
-        self.bounty = 8
+        self.bounty = 10
 
 
 class Goblin(Character):
     def __init__(self):
         self.name = 'goblin'
-        self.health = 6
+        self.health = 10
         self.power = 2
         self.bounty = 5
 
@@ -209,7 +216,7 @@ class Battle(object):
             print "What do you want to do?"
             print "1. fight %s" % enemy.name
             print "2. do nothing"
-            print "3. check inventory"
+            print "3. Use item"
             print "4. flee"
             print "> ",
             input = int(raw_input())
@@ -217,9 +224,42 @@ class Battle(object):
                 hero.attack(enemy)
             elif input == 2:
                 pass
+            #elif input == 3:
+                # for item in hero.inventory:
+                #     print item
+                # item_number = int(raw_input("Which item to use?"))
+                # selected_item = hero.inventory[item_number -1]
+                # print "%s selected" % selected_item
+                # selected_item.apply(hero)
+                # hero.inventory.remove(selected_item)
+
+            #Use item in store
+            # elif input == 3:
+            #     if len(hero.inventory) > 1:
+            #         for item in hero.inventory:
+            #             print item
+            #         item_number = int(raw_input("Which item to use?"))
+            #         selected_item = hero.inventory[item_number -1]
+            #         print "%s selected" % selected_item
+            #         selected_item.apply(hero)
+            #         hero.inventory.remove(selected_item)
+            #     else:
+            #         print "Inventory empty"
+            #Use item in store
             elif input == 3:
-                for item in hero.inventory:
-                    print item
+                if len(hero.inventory):
+                    #Original inventory choosing
+                    # for item in hero.inventory:
+                    #     print item
+                    for i in xrange(len(hero.inventory)):
+                        item = hero.inventory[i]
+                        print "%d. %s" % (i + 1, item.name)
+                    item_number = int(raw_input("Which item to use?"))
+                    selected_item = hero.inventory[item_number -1]
+                    if selected_item >= len(hero.inventory):
+                        print "%s selected" % selected_item
+                        selected_item.apply(hero)
+                        hero.inventory.remove(selected_item)
             elif input == 4:
                 print "Goodbye."
                 exit(0)
@@ -320,16 +360,35 @@ class Store(object):
             for i in xrange(len(Store.items)):
                 item = Store.items[i]
                 print "%d. buy %s (%d)" % (i + 1, item.name, item.cost)
+            print "8. Use Item"
             print "9. Check Inventory"
             print "10. leave"
             input = int(raw_input("> "))
 
+            #Use item in store
+            if input == 8:
+                if len(hero.inventory):
+                    #Original inventory choosing
+                    # for item in hero.inventory:
+                    #     print item
+                    for i in xrange(len(hero.inventory)):
+                        item = hero.inventory[i]
+                        print "%d. %s" % (i + 1, item.name)
+                    item_number = int(raw_input("Which item to use?"))
+                    selected_item = hero.inventory[item_number -1]
+                    if selected_item >= len(hero.inventory):
+                        print "%s selected" % selected_item
+                        selected_item.apply(hero)
+                        hero.inventory.remove(selected_item)
+                    else:
+                        print "Invalid input"
+                else:
+                    print "Inventory empty"
 
             #Check inventory in store
-            if input == 9:
+            elif input == 9:
                 for item in hero.inventory:
                     print item
-                #do_shopping(hero)
             elif input == 10:
                 break
             else:
@@ -339,7 +398,7 @@ class Store(object):
 
 hero = Hero()
 #enemies = [Goblin(), Wizard()]
-enemies = [Goblin(), Goblin_Chief(), Goblin()]
+enemies = [Goblin(), Goblin_Chief(), Goblin_King()]
 
 #Inventory Checking
 #free_tonic = Tonic()

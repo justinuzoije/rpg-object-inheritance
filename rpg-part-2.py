@@ -320,9 +320,17 @@ class Store(object):
             for i in xrange(len(Store.items)):
                 item = Store.items[i]
                 print "%d. buy %s (%d)" % (i + 1, item.name, item.cost)
+            print "9. Check Inventory"
             print "10. leave"
             input = int(raw_input("> "))
-            if input == 10:
+
+
+            #Check inventory in store
+            if input == 9:
+                for item in hero.inventory:
+                    print item
+                #do_shopping(hero)
+            elif input == 10:
                 break
             else:
                 ItemToBuy = Store.items[input - 1]

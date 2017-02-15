@@ -33,9 +33,9 @@ class Character(object):
 class Hero(Character):
     def __init__(self):
         self.name = 'hero'
-        self.health = 100 #Previously 10
+        self.health = 10
         self.power = 5
-        self.coins = 200 #Previously 20
+        self.coins = 20 
         self.armor = 0
         self.evade = 0
         self.inventory = []
@@ -224,33 +224,8 @@ class Battle(object):
                 hero.attack(enemy)
             elif input == 2:
                 pass
-            #elif input == 3:
-                # for item in hero.inventory:
-                #     print item
-                # item_number = int(raw_input("Which item to use?"))
-                # selected_item = hero.inventory[item_number -1]
-                # print "%s selected" % selected_item
-                # selected_item.apply(hero)
-                # hero.inventory.remove(selected_item)
-
-            #Use item in store
-            # elif input == 3:
-            #     if len(hero.inventory) > 1:
-            #         for item in hero.inventory:
-            #             print item
-            #         item_number = int(raw_input("Which item to use?"))
-            #         selected_item = hero.inventory[item_number -1]
-            #         print "%s selected" % selected_item
-            #         selected_item.apply(hero)
-            #         hero.inventory.remove(selected_item)
-            #     else:
-            #         print "Inventory empty"
-            #Use item in store
             elif input == 3:
                 if len(hero.inventory):
-                    #Original inventory choosing
-                    # for item in hero.inventory:
-                    #     print item
                     for i in xrange(len(hero.inventory)):
                         item = hero.inventory[i]
                         print "%d. %s" % (i + 1, item.name)
@@ -315,15 +290,43 @@ class SuperTonic(object):
     def __repr__(self):
         return "Super Tonic"
 
-class Poison(object):
-    cost = 10
-    name = 'poison'
-    def apply(self, character):
-        character.health -= 10
-        print "%s's health decreased to %d." % (character.name, character.health)
+# class Poison(object):
+#     cost = 10
+#     name = 'poison'
+#     def apply(self, character):
+#         character.health -= 10
+#         print "%s's health decreased to %d." % (character.name, character.health)
+#
+#     def __repr__(self):
+#         return "Poison"
+
+class Swap(object):
+    cost = 5
+    name = 'swap'
+
+    def apply(self, character): #remove enemey
+        # hero_power = character.power
+        # enemy_power = enemy.power
+        # character.power = enemy_power
+        # enemy.power = hero_power
+        # print "%s's power is now %d!" % (hero.name, hero.power)
+        # print "%s's power is now %d!" % (enemy.name, enemy.power)
+        #Debug
+        #Do an attack loop
+        # print "hero power is %d" % hero.power
+        # print "enemy power is %d" % enemy.power
+
+        print "%s swaps power with %s during attack" % (self.name, enemy.name)
+        hero.power, enemy.power = enemy.power, hero.power
+        hero.attack(enemy)
+        enemy.attack(hero)
+        # print "hero power is %d" % hero.power
+        # print "enemy power is %d" % enemy.power
+        hero.power, enemy.power = enemy.power, hero.power
+        #Add swap item to store
 
     def __repr__(self):
-        return "Poison"
+        return "Swap"
 
 class Armor(object):
     cost = 10
@@ -349,7 +352,7 @@ class Store(object):
     # If you define a variable in the scope of a class:
     # This is a class variable and you can access it like
     # Store.items => [Tonic, Sword]
-    items = [Tonic, Sword, Axe, SuperTonic, Armor, Evade, Poison]
+    items = [Tonic, Sword, Axe, SuperTonic, Armor, Evade, Swap]
     def do_shopping(self, hero):
         while True:
             print "====================="
@@ -398,7 +401,7 @@ class Store(object):
 
 hero = Hero()
 #enemies = [Goblin(), Wizard()]
-enemies = [Goblin(), Goblin_Chief(), Goblin_King()]
+enemies = [Rat(), Goblin(), Wizard(), Medic(), Goblin_Chief(), Goblin_King()]
 
 #Inventory Checking
 #free_tonic = Tonic()

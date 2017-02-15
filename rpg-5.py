@@ -46,6 +46,18 @@ class Hero(Character):
         self.coins -= item.cost
         item.apply(hero)
 
+    def attack(self, enemy):
+        if not self.alive():
+            return
+        print "%s attacks %s" % (self.name, enemy.name)
+        crit_attack = random.randint(1,10) > 8
+        if crit_attack:
+            print "Critical attack!"
+            self.power = self.power*2
+        enemy.receive_damage(self.power)
+        time.sleep(1.5)
+        
+
 class Goblin(Character):
     def __init__(self):
         self.name = 'goblin'

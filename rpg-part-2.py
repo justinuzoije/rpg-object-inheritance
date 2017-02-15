@@ -37,6 +37,7 @@ class Hero(Character):
         self.power = 5
         self.coins = 20
         self.armor = 0
+        self.evade = 0
 
     def restore(self):
         self.health = 10
@@ -44,8 +45,11 @@ class Hero(Character):
         time.sleep(1)
 
     def buy(self, item):
-        self.coins -= item.cost
-        item.apply(hero)
+        if self.coins >= item.cost:
+            self.coins -= item.cost
+            item.apply(hero)
+        else:
+            print "Not enough coins"
 
     def attack(self, enemy):
         if not self.alive():
@@ -60,6 +64,12 @@ class Hero(Character):
         time.sleep(1.5)
 
     def receive_damage(self, points):
+        #Each evade point deceases chance of being hit by 5%
+        chance_to_behit = 100 - (self.evade * 5)
+        print "%s percent chance to be hit" % chance_to_behit
+
+        #if chance_to_behit > random.randint(1,100)
+
         points = points - self.armor
         self.health -= points
         print "%s received %d damage." % (self.name, points)
@@ -220,12 +230,26 @@ class Sword(object):
         hero.power += 2
         print "%s's power increased to %d." % (hero.name, hero.power)
 
+class Axe(object):
+    cost = 15
+    name = 'axe'
+    def apply(self, hero):
+        hero.power += 4
+        print "%s's power increased to %d." % (hero.name, hero.power)
+
 class SuperTonic(object):
     cost = 10
     name = 'super tonic'
     def apply(self, character):
         character.health = 10
         print "%s's health is restored." % character.name
+
+class Poison(object):
+    cost = 10
+    name = 'poison'
+    def apply(self, character):
+        character.health -= 10
+        print "%s's health decreased to %d." % (character.name, character.health)
 
 class Armor(object):
     cost = 10
@@ -245,7 +269,7 @@ class Store(object):
     # If you define a variable in the scope of a class:
     # This is a class variable and you can access it like
     # Store.items => [Tonic, Sword]
-    items = [Tonic, Sword, SuperTonic, Armor, Evade]
+    items = [Tonic, Sword, Axe, SuperTonic, Armor, Evade, Poison]
     def do_shopping(self, hero):
         while True:
             print "====================="

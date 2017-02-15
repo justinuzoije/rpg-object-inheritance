@@ -35,7 +35,7 @@ class Hero(Character):
         self.name = 'hero'
         self.health = 10
         self.power = 5
-        self.coins = 20 
+        self.coins = 20
         self.armor = 0
         self.evade = 0
         self.inventory = []
@@ -230,11 +230,22 @@ class Battle(object):
                         item = hero.inventory[i]
                         print "%d. %s" % (i + 1, item.name)
                     item_number = int(raw_input("Which item to use?"))
-                    selected_item = hero.inventory[item_number -1]
-                    if selected_item >= len(hero.inventory):
+                    try :
+                        selected_item = hero.inventory[item_number -1]
+                    except:
+                        "print Invalid selection"
+                    try:
+                        selected_item = hero.inventory[item_number -1]
+                        #if selected_item >= len(hero.inventory):
                         print "%s selected" % selected_item
                         selected_item.apply(hero)
                         hero.inventory.remove(selected_item)
+                    except:
+                        print "Invalid selection"
+                    else:
+                        print "Invalid input"
+                else:
+                    print "Inventory empty"
             elif input == 4:
                 print "Goodbye."
                 exit(0)
@@ -378,11 +389,18 @@ class Store(object):
                         item = hero.inventory[i]
                         print "%d. %s" % (i + 1, item.name)
                     item_number = int(raw_input("Which item to use?"))
-                    selected_item = hero.inventory[item_number -1]
-                    if selected_item >= len(hero.inventory):
+                    try :
+                        selected_item = hero.inventory[item_number -1]
+                    except:
+                        "print Invalid selection"
+                    try:
+                        selected_item = hero.inventory[item_number -1]
+                        #if selected_item >= len(hero.inventory):
                         print "%s selected" % selected_item
                         selected_item.apply(hero)
                         hero.inventory.remove(selected_item)
+                    except:
+                        print "Invalid selection"
                     else:
                         print "Invalid input"
                 else:

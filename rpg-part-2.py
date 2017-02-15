@@ -68,11 +68,11 @@ class Hero(Character):
         chance_to_behit = 100 - (self.evade * 5)
         print "%s percent chance to be hit" % chance_to_behit
 
-        #if chance_to_behit > random.randint(1,100)
+        if chance_to_behit < random.randint(1,100):
+            points = points - self.armor
+            self.health -= points
+            print "%s received %d damage." % (self.name, points)
 
-        points = points - self.armor
-        self.health -= points
-        print "%s received %d damage." % (self.name, points)
         if self.health <= 0:
             print "%s is dead." % self.name
 
@@ -156,6 +156,13 @@ class Ghost(Character):
         self.health -= points
         if self.health <= 0:
             print "%s is dead." % self.name
+
+class Goblin_Chief(Character):
+    def __init__(self):
+        self.name = 'goblin chief'
+        self.health = 10
+        self.power = 4
+        self.bounty = 8
 
 
 class Goblin(Character):
@@ -291,7 +298,7 @@ class Store(object):
 
 hero = Hero()
 #enemies = [Goblin(), Wizard()]
-enemies = [Goblin(), Goblin(), Goblin()]
+enemies = [Goblin(), Goblin_Chief(), Goblin()]
 battle_engine = Battle()
 shopping_engine = Store()
 
